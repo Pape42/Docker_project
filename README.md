@@ -1,13 +1,31 @@
 # Dragon Ball Super - personnages
 
-Petite application web conteneurisée : une API Node.js/Express qui liste et
-enregistre des personnages, et une base PostgreSQL. Données fictives, projet
-d'école.
+Application web conteneurisée : une API Node.js/Express qui affiche la liste
+des personnages de Dragon Ball Super et permet d'en ajouter via un
+formulaire, et une base PostgreSQL qui les conserve. Adminer est fourni pour
+consulter la base dans le navigateur. Données fictives, projet d'école.
 
 ## Prérequis
 
-- Docker Desktop (ou Docker Engine) avec Docker Compose v2
-- Rien d'autre : ni Node, ni PostgreSQL installés sur la machine
+Docker Desktop (Docker Compose v2 est inclus). Ni Node ni PostgreSQL n'ont
+besoin d'être installés sur la machine.
+
+## Créer le fichier .env
+
+Les identifiants de la base ne sont pas versionnés : il faut créer son propre
+`.env` à partir de l'exemple.
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Puis ouvrir `.env` et remplacer `a-remplacer` par un vrai mot de passe :
+
+```
+POSTGRES_USER=dbs
+POSTGRES_PASSWORD=...votre mot de passe...
+POSTGRES_DB=personnages
+```
 
 ## Lancer
 
@@ -15,10 +33,27 @@ d'école.
 docker compose up -d --build
 ```
 
-Puis ouvrir http://localhost:3000
+| URL | Quoi |
+|---|---|
+| http://localhost:3000 | l'application |
+| http://localhost:8080 | Adminer |
 
-La base met quelques secondes à être prête : l'application attend son
-healthcheck avant de démarrer.
+La base met quelques secondes à être prête : l'application réessaie toute
+seule, le bandeau passe à « Base : connectée » dès que c'est bon.
+
+## Se connecter à Adminer
+
+Sur http://localhost:8080 :
+
+| Champ | Valeur |
+|---|---|
+| Système | PostgreSQL |
+| Serveur | `db` |
+| Utilisateur | la valeur de `POSTGRES_USER` du `.env` |
+| Mot de passe | la valeur de `POSTGRES_PASSWORD` du `.env` |
+| Base de données | la valeur de `POSTGRES_DB` du `.env` |
+
+La table `personnages` est alors visible dans le schéma `public`.
 
 ## Arrêter
 
@@ -36,14 +71,6 @@ docker compose down -v   # arrête tout et supprime la base
 | GET | `/api/personnages` | la liste des personnages |
 | POST | `/api/personnages` | ajoute un personnage |
 
-```bash
-curl localhost:3000/api/sante
-
-curl -X POST localhost:3000/api/personnages \
-  -H "Content-Type: application/json" \
-  -d '{"nom":"Freezer","race":"Frost Demon","univers":7,"technique":"Death Beam"}'
-```
-
 Au premier démarrage, la table `personnages` est créée et remplie avec
 5 personnages d'exemple.
 
@@ -52,36 +79,16 @@ Au premier démarrage, la table `personnages` est créée et remplie avec
 ```
 .
 ├── app/
-│   ├── Dockerfile        image de l'application (node:24.22.3-alpine)
-│   ├── .dockerignore
+│   ├── Dockerfile        image de l'application
 │   ├── package.json
 │   ├── server.js         toute l'application (API + service de la page)
 │   └── public/
 │       └── index.html    la page web
-└── docker-compose.yml    l'application + PostgreSQL
+├── compose.yaml          l'application, PostgreSQL et Adminer
+└── .env.example          modèle pour le .env
 ```
 
-## Configuration
+## Auteurs
 
-L'application ne contient aucun mot de passe : elle lit les variables
-d'environnement fournies par Compose.
-
-| Variable | Valeur par défaut | Rôle |
-|---|---|---|
-| `PORT` | `3000` | port d'écoute de l'application |
-| `PGHOST` | `db` | nom du service PostgreSQL |
-| `PGPORT` | `5432` | port de PostgreSQL |
-| `PGUSER` | `dbs` | utilisateur |
-| `PGPASSWORD` | `dbs` | mot de passe |
-| `PGDATABASE` | `dbs` | nom de la base |
-
-Les données vivent dans le volume nommé `db-data`, elles survivent donc à un
-`docker compose down`.
-
-## Si ça ne marche pas
-
-| Symptôme | Cause probable |
-|---|---|
-| `/api/sante` répond `base: non connectée` | la base démarre encore, attendre quelques secondes |
-| port 3000 déjà utilisé | changer le port publié dans `docker-compose.yml` (`"8080:3000"`) |
-| la base refuse de démarrer après un changement de version de PostgreSQL | `docker compose down -v` puis relancer (les données sont perdues) |
+- Pape Bathily
+- Xavier
