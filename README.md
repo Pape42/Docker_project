@@ -1,94 +1,41 @@
-# Dragon Ball Super - personnages
+@'
+Dragon Ball Super - personnages
 
-Application web conteneurisée : une API Node.js/Express qui affiche la liste
-des personnages de Dragon Ball Super et permet d'en ajouter via un
-formulaire, et une base PostgreSQL qui les conserve. Adminer est fourni pour
-consulter la base dans le navigateur. Données fictives, projet d'école.
+Cette application web affiche une liste de personnages de Dragon Ball Super (nom, race, univers, technique) et permet d'en ajouter avec un formulaire. Les personnages sont enregistrés dans une base de données PostgreSQL. Adminer permet de voir la base depuis le navigateur.
 
-## Prérequis
+Prérequis
 
-Docker Desktop (Docker Compose v2 est inclus). Ni Node ni PostgreSQL n'ont
-besoin d'être installés sur la machine.
+Il faut seulement installer Docker Desktop.
 
-## Créer le fichier .env
+Créer le fichier .env
 
-Les identifiants de la base ne sont pas versionnés : il faut créer son propre
-`.env` à partir de l'exemple.
+Copier le fichier .env.example en .env avec la commande : Copy-Item .env.example .env
+Puis ouvrir .env et remplacer a-remplacer par un mot de passe.
 
-```powershell
-Copy-Item .env.example .env
-```
+Lancer le projet
 
-Puis ouvrir `.env` et remplacer `a-remplacer` par un vrai mot de passe :
+Lancer la commande : docker compose up -d --build
 
-```
-POSTGRES_USER=dbs
-POSTGRES_PASSWORD=...votre mot de passe...
-POSTGRES_DB=personnages
-```
+Les adresses
 
-## Lancer
+L'application : http://localhost:3000
+Adminer : http://localhost:8080
 
-```bash
-docker compose up -d --build
-```
+Se connecter à Adminer
 
-| URL | Quoi |
-|---|---|
-| http://localhost:3000 | l'application |
-| http://localhost:8080 | Adminer |
+Système : PostgreSQL
+Serveur : db
+Utilisateur : la valeur de POSTGRES_USER dans le fichier .env
+Mot de passe : la valeur de POSTGRES_PASSWORD dans le fichier .env
+Base de données : la valeur de POSTGRES_DB dans le fichier .env
 
-La base met quelques secondes à être prête : l'application réessaie toute
-seule, le bandeau passe à « Base : connectée » dès que c'est bon.
+Arrêter le projet
 
-## Se connecter à Adminer
+docker compose down arrête le projet et garde les données.
+docker compose down -v arrête le projet et supprime les données.
 
-Sur http://localhost:8080 :
+Auteurs
 
-| Champ | Valeur |
-|---|---|
-| Système | PostgreSQL |
-| Serveur | `db` |
-| Utilisateur | la valeur de `POSTGRES_USER` du `.env` |
-| Mot de passe | la valeur de `POSTGRES_PASSWORD` du `.env` |
-| Base de données | la valeur de `POSTGRES_DB` du `.env` |
-
-La table `personnages` est alors visible dans le schéma `public`.
-
-## Arrêter
-
-```bash
-docker compose down      # arrête tout, garde les données
-docker compose down -v   # arrête tout et supprime la base
-```
-
-## Endpoints
-
-| Méthode | Chemin | Rôle |
-|---|---|---|
-| GET | `/` | la page web |
-| GET | `/api/sante` | état de l'API, de la base, nom du conteneur |
-| GET | `/api/personnages` | la liste des personnages |
-| POST | `/api/personnages` | ajoute un personnage |
-
-Au premier démarrage, la table `personnages` est créée et remplie avec
-5 personnages d'exemple.
-
-## Structure
-
-```
-.
-├── app/
-│   ├── Dockerfile        image de l'application
-│   ├── package.json
-│   ├── server.js         toute l'application (API + service de la page)
-│   └── public/
-│       └── index.html    la page web
-├── compose.yaml          l'application, PostgreSQL et Adminer
-└── .env.example          modèle pour le .env
-```
-
-## Auteurs
-
-- Pape Bathily
-- Xavier
+Pape Bathily
+Xavier
+'@ | Set-Content -Encoding utf8 README.md
