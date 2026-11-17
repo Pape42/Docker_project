@@ -3,6 +3,9 @@ Dragon Ball Super - personnages
 
 Cette application web affiche une liste de personnages de Dragon Ball Super (nom, race, univers, technique) et permet d'en ajouter avec un formulaire. Les personnages sont enregistrés dans une base de données PostgreSQL. Adminer permet de voir la base depuis le navigateur.
 
+Important : créer et enregistrer le .env AVANT de lancer docker compose up.
+Si la page affiche "Base : non connectée", lancer "docker compose down -v" puis "docker compose up -d".
+
 Prérequis
 
 Il faut seulement installer Docker Desktop.
