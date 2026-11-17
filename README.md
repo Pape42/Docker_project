@@ -1,4 +1,4 @@
-@'
+
 Dragon Ball Super - personnages
 
 Cette application web affiche une liste de personnages de Dragon Ball Super (nom, race, univers, technique) et permet d'en ajouter avec un formulaire. Les personnages sont enregistrés dans une base de données PostgreSQL. Adminer permet de voir la base depuis le navigateur.
@@ -37,5 +37,5 @@ docker compose down -v arrête le projet et supprime les données.
 Auteurs
 
 Pape Bathily
-Xavier
-'@ | Set-Content -Encoding utf8 README.md
+Xavier Carrier
+
