@@ -1,12 +1,3 @@
-// ---------------------------------------------------------------------------
-// Dragon Ball Super - les personnages (données fictives, projet d'école)
-//
-// Ce fichier est TOUTE l'application :
-//   - elle affiche une page web (public/index.html) ;
-//   - elle se connecte à une base PostgreSQL si on lui dit où la trouver ;
-//   - elle liste et enregistre des personnages.
-// ---------------------------------------------------------------------------
-
 const os = require("node:os");
 const path = require("node:path");
 const express = require("express");
@@ -16,9 +7,7 @@ const { Pool } = require("pg");
 const PORT = process.env.PORT || 3000;
 
 // La connexion à la base.
-// On ne met AUCUN mot de passe ici : la librairie "pg" lit toute seule les
-// variables d'environnement PGHOST, PGPORT, PGUSER, PGPASSWORD et PGDATABASE.
-// C'est Docker qui les fournira.
+
 const pool = new Pool();
 
 // Évite que l'application plante si la base disparaît en cours de route.
@@ -41,8 +30,7 @@ const PERSONNAGES_DE_DEPART = [
 ];
 
 // Se connecte à la base, crée la table si besoin et ajoute les 5 personnages.
-// Si la base n'est pas joignable, on réessaie toutes les 2 secondes
-// au lieu de planter : l'application reste utilisable sans base.
+
 async function connecterLaBase() {
   try {
     await pool.query(`
@@ -87,8 +75,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// L'état de l'application. "conteneur" est le nom de la machine :
-// dans Docker, c'est l'identifiant du conteneur.
+
 app.get("/api/sante", (req, res) => {
   res.json({
     api: "ok",
